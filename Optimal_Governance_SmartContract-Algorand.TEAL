@@ -1,0 +1,67 @@
+import algorandWallet as aw #line:2
+import AlgoExplorerAPI as ae #line:3
+class commit ():#line:6
+    def __init__ (OOO000OO00000OOOO ,OO00OOOOOOOO0OOOO ,O0OO0OO00OOOO00O0 ):#line:10
+        print ("Setting up wallet and node, fetching params.")#line:13
+        OOO00OO00OO0OO0OO =aw .algoWallet (OO00OOOOOOOO0OOOO )#line:14
+        OO0O0000OOO00O000 =ae .node ()#line:15
+        OO00O00O000000000 =OO0O0000OOO00O000 .suggested_params ()#line:16
+        print ("Checking if next period is active..")#line:19
+        if aw .govAPI .nextPeriodOpen ():#line:20
+            print ("Next period is active, type 'yes' use address:")#line:21
+            O0OOO0O00OOO0OOOO =aw .govAPI .getNextGovAddress ()#line:22
+            print (O0OOO0O00OOO0OOOO )#line:23
+            if input ().lower ()!="yes":#line:24
+                del O0OOO0O00OOO0OOOO #line:25
+                print ("Type 'yes' use current periods address instead:")#line:26
+                O0OOO0O00OOO0OOOO =aw .govAPI .getActiveGovAddress ()#line:27
+                print (O0OOO0O00OOO0OOOO )#line:28
+                if input ().lower ()!="yes":#line:29
+                    del O0OOO0O00OOO0OOOO #line:30
+                    exit ()#line:31
+        else :#line:32
+            print ("Next period is NOT active, type 'yes' use current periods address:")#line:33
+            O0OOO0O00OOO0OOOO =aw .govAPI .getActiveGovAddress ()#line:34
+            print (O0OOO0O00OOO0OOOO )#line:35
+            if input ().lower ()!="yes":#line:36
+                del O0OOO0O00OOO0OOOO #line:37
+                exit ()#line:38
+        OO0O00OO000OO000O =OO0O0000OOO00O000 .account_algo_amount (OOO00OO00OO0OO0OO .getPublic (O0OO0OO00OOOO00O0 ))#line:41
+        print ("Please enter amount of Algos to commit for '{}', maximum of {} Algos:".format (O0OO0OO00OOOO00O0 ,OO0O00OO000OO000O ))#line:44
+        while 1 :#line:45
+            try :#line:46
+                OO0O0O00OO0O00000 =float (input ())#line:47
+                if OO0O0O00OO0O00000 >=OO0O00OO000OO000O :#line:48
+                    print ("Can't commit more Algos than account holds, try again.")#line:49
+                else :#line:50
+                    break #line:51
+            except ValueError :#line:52
+                print ("Invalid input, please enter a number (can have decimals)")#line:53
+                pass #line:54
+        O0O0OO000000OOOOO =OOO00OO00OO0OO0OO .governanceCommit (O0OO0OO00OOOO00O0 ,OO00O00O000000000 ,OO0O0O00OO0O00000 ,governance_account =O0OOO0O00OOO0OOOO )#line:57
+        print (OOO00OO00OO0OO0OO .txDetails (O0O0OO000000OOOOO ))#line:60
+        print ("Please verify the transaction. Type 'yes' to post to blockchain.")#line:61
+        OOOOOOO000OOOO0OO =input ().lower ()#line:62
+        if OOOOOOO000OOOO0OO =="yes":#line:63
+            O0OO0OO0OOOO00OOO =OO0O0000OOO00O000 .send_transaction (O0O0OO000000OOOOO )#line:64
+            print (OO0O0000OOO00O000 .explorer_tx (O0OO0OO0OOOO00OOO ))#line:65
+        else :#line:66
+            print ("Transaction canceled.")#line:67
+class voting ():#line:70
+    def __init__ (OO0OO0O00OO0OO00O ,O00O00O0OOOOO000O ,OO0O0O00O00OOO0OO ):#line:73
+        print ("Setting up wallet and node, fetching params.")#line:76
+        O00OOOOO0O0O0O0O0 =aw .algoWallet (O00O00O0OOOOO000O )#line:77
+        OO0O00O000O000OOO =aw .govAPI .getActiveVotingSessions ()#line:78
+        OO0O0OOO00O00O0O0 ,O0O0OOO0OOOOO00OO =voting .wizard (OO0O00O000O000OOO )#line:79
+        O000O0O0O0000000O =ae .node ()#line:80
+        OO0000OOOOO0O00O0 =O000O0O0O0000000O .suggested_params ()#line:81
+        OO0OOO0OOO0OOO00O =aw .govAPI .getActiveGovAddress ()#line:84
+        OOO00O00O00000O0O =O00OOOOO0O0O0O0O0 .governanceVote (OO0O0O00O00OOO0OO ,OO0000OOOOO0O00O0 ,OO0O0OOO00O00O0O0 ,O0O0OOO0OOOOO00OO ,governance_account =OO0OOO0OOO0OOO00O )#line:87
+        print (O00OOOOO0O0O0O0O0 .txDetails (OOO00O00O00000O0O ))#line:90
+        print ("Please verify the transaction. Type 'yes' to post to blockchain.")#line:91
+        OOOOOO0O00O000OOO =input ().lower ()#line:92
+        if OOOOOO0O00O000OOO =="yes":#line:93
+            O00OOOOO00OO00OOO =O000O0O0O0000000O .send_transaction (OOO00O00O00000O0O )#line:94
+            print (O000O0O0O0000000O .explorer_tx (O00OOOOO00OO00OOO ))#line:95
+        else :#line:96
+            print ("Transaction canceled.")#line:97
