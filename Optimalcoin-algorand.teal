@@ -1,0 +1,30 @@
+
+    # Optimal Algorand Smart Contract Solutions: Increased Tax Efficiency Empowered by Blockchain Technology
+    # Optimal token is a part of the the Optimal DApp
+    # Note that this token is under development
+   
+   
+ from pyteal import *#line:2
+def approval_program ():#line:5
+    OOO0OOO00OO00O00O =Seq ([Assert (Txn .application_args .length ()==Int (1 )),App .globalPut (Bytes ("total supply"),Btoi (Txn .application_args [0 ])),App .globalPut (Bytes ("reserve"),Btoi (Txn .application_args [0 ])),App .localPut (Int (0 ),Bytes ("admin"),Int (1 )),App .localPut (Int (0 ),Bytes ("balance"),Int (0 )),Return (Int (1 )),])#line:15
+    OOO00OOOOO0OO0O00 =App .localGet (Int (0 ),Bytes ("admin"))#line:17
+    OOOOOOO0O0OOOOOOO =Seq ([App .globalPut (Bytes ("reserve"),App .globalGet (Bytes ("reserve"))+App .localGet (Int (0 ),Bytes ("balance")),),Return (Int (1 )),])#line:28
+    O0O000O00O000O000 =Seq ([App .localPut (Int (0 ),Bytes ("balance"),Int (0 )),Return (Int (1 ))])#line:30
+    OOOOOOO00OO0O0OOO =Btoi (Txn .application_args [1 ])#line:34
+    O0OO00O0O000O0OOO =Seq ([Assert (And (OOO00OOOOO0OO0O00 ,Txn .application_args .length ()==Int (2 ))),App .localPut (Int (1 ),Bytes ("admin"),OOOOOOO00OO0O0OOO ),Return (Int (1 )),])#line:41
+    OO0OOOO0OOO0OO0OO =Btoi (Txn .application_args [1 ])#line:44
+    OOO0OOO0O00O0OOO0 =Seq ([Assert (Txn .application_args .length ()==Int (2 )),Assert (OO0OOOO0OOO0OO0OO <=App .globalGet (Bytes ("reserve"))),App .globalPut (Bytes ("reserve"),App .globalGet (Bytes ("reserve"))-OO0OOOO0OOO0OO0OO ),App .localPut (Int (1 ),Bytes ("balance"),App .localGet (Int (1 ),Bytes ("balance"))+OO0OOOO0OOO0OO0OO ,),Return (OOO00OOOOO0OO0O00 ),])#line:59
+    O00OO000000O0OOO0 =Btoi (Txn .application_args [1 ])#line:62
+    OOOO0OO0OO0OOOO0O =Seq ([Assert (Txn .application_args .length ()==Int (2 )),Assert (O00OO000000O0OOO0 <=App .localGet (Int (0 ),Bytes ("balance"))),App .localPut (Int (0 ),Bytes ("balance"),App .localGet (Int (0 ),Bytes ("balance"))-O00OO000000O0OOO0 ,),App .localPut (Int (1 ),Bytes ("balance"),App .localGet (Int (1 ),Bytes ("balance"))+O00OO000000O0OOO0 ,),Return (Int (1 )),])#line:79
+    OO0OO0OOO000OOO00 =Cond ([Txn .application_id ()==Int (0 ),OOO0OOO00OO00O00O ],[Txn .on_completion ()==OnComplete .DeleteApplication ,Return (OOO00OOOOO0OO0O00 )],[Txn .on_completion ()==OnComplete .UpdateApplication ,Return (OOO00OOOOO0OO0O00 )],[Txn .on_completion ()==OnComplete .CloseOut ,OOOOOOO0O0OOOOOOO ],[Txn .on_completion ()==OnComplete .OptIn ,O0O000O00O000O000 ],[Txn .application_args [0 ]==Bytes ("set admin"),O0OO00O0O000O0OOO ],[Txn .application_args [0 ]==Bytes ("mint"),OOO0OOO0O00O0OOO0 ],[Txn .application_args [0 ]==Bytes ("transfer"),OOOO0OO0OO0OOOO0O ],)#line:90
+    return OO0OO0OOO000OOO00 #line:92
+def clear_state_program ():#line:95
+    OOO0O00O0O00OO00O =Seq ([App .globalPut (Bytes ("reserve"),App .globalGet (Bytes ("reserve"))+App .localGet (Int (0 ),Bytes ("balance")),),Return (Int (1 )),])#line:105
+    return OOO0O00O0O00OO00O #line:107
+if __name__ =="__main__":#line:110
+    with open ("asset_approval.teal","w")as f :#line:111
+        compiled =compileTeal (approval_program (),mode =Mode .Application ,version =2 )#line:112
+        f .write (compiled )#line:113
+    with open ("asset_clear_state.teal","w")as f :#line:115
+        compiled =compileTeal (clear_state_program (),mode =Mode .Application ,version =2 )#line:116
+        f .write (compiled )
